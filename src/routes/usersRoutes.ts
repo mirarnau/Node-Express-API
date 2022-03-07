@@ -9,18 +9,18 @@ class PostRoutes {
         this.routes(); //This has to be written here so that the method can actually be configured when called externally.
     }
 
-    async getUsers(req: Request, res: Response) {
+    public async getUsers(req: Request, res: Response) : Promise<void> { //It returns a void, but internally it's a promise.
         const allUsers = await User.find();
         res.json(allUsers);
     }
 
-    async getUserByName(req: Request, res: Response) {
+    public async getUserByName(req: Request, res: Response) : Promise<void> {
         const userFound = await User.findOne({name: req.params.nameUser});
         res.json(userFound);
         
     }
 
-    async addUser(req: Request, res: Response) {
+    public async addUser(req: Request, res: Response) : Promise<void> {
         console.log(req.body);
         const {id, name, psicoProfile, role} = req.body;
         const newUser = new User({id, name, psicoProfile, role});
@@ -28,12 +28,12 @@ class PostRoutes {
         res.json('User added!');
     }
 
-    async updateUser(req: Request, res: Response) {
+    public async updateUser(req: Request, res: Response) : Promise<void> {
         await User.findOneAndUpdate ({name: req.params.nameUser}, req.body);
         res.json('Updated!');
     }
 
-    async deleteUser(req: Request, res: Response) {
+    public async deleteUser(req: Request, res: Response) : Promise<void> {
         await User.findOneAndDelete ({name:req.params.nameUser}, req.body);
         res.json('Deleted!')
 
