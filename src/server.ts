@@ -26,13 +26,14 @@ class Server {
 
         //Settings
         this.app.set('port', process.env.PORT || 3000); 
+
         //Middlewares
-        this.app.use(morgan('dev'));
-        this.app.use(express.json());
+        this.app.use(morgan('dev')); //Allows to see by console the petitions that eventually arrive.
+        this.app.use(express.json()); //So that Express parses JSON as the body structure, as it doens't by default.
         this.app.use(express.urlencoded({extended:false}));
-        this.app.use(helmet());
-        this.app.use(compression());
-        this.app.use(cors());
+        this.app.use(helmet()); //Offers automatically security in front of some cracking attacks.
+        this.app.use(compression()); //Allows to send the data back in a compressed format.
+        this.app.use(cors()); //It automatically configures and leads with CORS issues and configurations.
     }
 
     routes() {

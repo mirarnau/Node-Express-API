@@ -26,12 +26,12 @@ class Server {
         //Settings
         this.app.set('port', process.env.PORT || 3000);
         //Middlewares
-        this.app.use((0, morgan_1.default)('dev'));
-        this.app.use(express_1.default.json());
+        this.app.use((0, morgan_1.default)('dev')); //Allows to see by console the petitions that eventually arrive.
+        this.app.use(express_1.default.json()); //So that Express parses JSON as the body structure, as it doens't by default.
         this.app.use(express_1.default.urlencoded({ extended: false }));
-        this.app.use((0, helmet_1.default)());
-        this.app.use((0, compression_1.default)());
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, helmet_1.default)()); //Offers automatically security in front of some cracking attacks.
+        this.app.use((0, compression_1.default)()); //Allows to send the data back in a compressed format.
+        this.app.use((0, cors_1.default)()); //It automatically configures and leads with CORS issues and configurations.
     }
     routes() {
         this.app.use(indexRoutes_1.default);
