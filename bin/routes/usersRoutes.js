@@ -12,11 +12,21 @@ class UserRoutes {
     }
     async getUsers(req, res) {
         const allUsers = await User_1.default.find();
-        res.status(200).send(allUsers);
+        if (allUsers.length == 0) {
+            res.status(404).send("There are no users yet!");
+        }
+        else {
+            res.status(200).send(allUsers);
+        }
     }
     async getUserByName(req, res) {
         const userFound = await User_1.default.findOne({ name: req.params.nameUser });
-        res.status(200).send(userFound);
+        if (userFound == null) {
+            res.status(404).send("The user doesn't exist!");
+        }
+        else {
+            res.status(200).send(userFound);
+        }
     }
     async addUser(req, res) {
         console.log(req.body);
@@ -26,12 +36,22 @@ class UserRoutes {
         res.status(200).send('User added!');
     }
     async updateUser(req, res) {
-        await User_1.default.findOneAndUpdate({ name: req.params.nameUser }, req.body);
-        res.status(200).send('Updated!');
+        const userToUpdate = await User_1.default.findOneAndUpdate({ name: req.params.nameUser }, req.body);
+        if (userToUpdate == null) {
+            res.status(404).send("The user doesn't exist!");
+        }
+        else {
+            res.status(200).send('Updated!');
+        }
     }
     async deleteUser(req, res) {
-        await User_1.default.findOneAndDelete({ name: req.params.nameUser }, req.body);
-        res.status(200).send('Deleted!');
+        const userToDelete = await User_1.default.findOneAndDelete({ name: req.params.nameUser }, req.body);
+        if (userToDelete == null) {
+            res.status(404).send("The user doesn't exist!");
+        }
+        else {
+            res.status(200).send('Deleted!');
+        }
     }
     routes() {
         this.router.get('/', this.getUsers);

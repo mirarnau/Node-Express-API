@@ -11,13 +11,22 @@ class UserRoutes {
 
     public async getUsers(req: Request, res: Response) : Promise<void> { //It returns a void, but internally it's a promise.
         const allUsers = await User.find();
-        res.status(200).send(allUsers);
+        if (allUsers.length == 0){
+            res.status(404).send("There are no users yet!")
+        }
+        else{
+            res.status(200).send(allUsers);
+        }
     }
 
     public async getUserByName(req: Request, res: Response) : Promise<void> {
         const userFound = await User.findOne({name: req.params.nameUser});
-        res.status(200).send(userFound);
-        
+        if(userFound == null){
+            res.status(404).send("The user doesn't exist!");
+        }
+        else{
+            res.status(200).send(userFound);
+        }
     }
 
     public async addUser(req: Request, res: Response) : Promise<void> {
@@ -29,14 +38,23 @@ class UserRoutes {
     }
 
     public async updateUser(req: Request, res: Response) : Promise<void> {
-        await User.findOneAndUpdate ({name: req.params.nameUser}, req.body);
-        res.status(200).send('Updated!');
+        const userToUpdate = await User.findOneAndUpdate ({name: req.params.nameUser}, req.body);
+        if(userToUpdate == null){
+            res.status(404).send("The user doesn't exist!");
+        }
+        else{
+            res.status(200).send('Updated!');
+        }
     }
 
     public async deleteUser(req: Request, res: Response) : Promise<void> {
-        await User.findOneAndDelete ({name:req.params.nameUser}, req.body);
-        res.status(200).send('Deleted!')
-
+        const userToDelete = await User.findOneAndDelete ({name:req.params.nameUser}, req.body);
+        if (userToDelete == null){
+            res.status(404).send("The user doesn't exist!")
+        }
+        else{
+            res.status(200).send('Deleted!');
+        }
     } 
 
     routes() {
