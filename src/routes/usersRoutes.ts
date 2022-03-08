@@ -2,7 +2,7 @@ import {Request, response, Response, Router} from 'express';
 
 import User from '../models/User';
 
-class PostRoutes {
+class UserRoutes {
     public router: Router;
     constructor() {
         this.router = Router();
@@ -11,31 +11,31 @@ class PostRoutes {
 
     public async getUsers(req: Request, res: Response) : Promise<void> { //It returns a void, but internally it's a promise.
         const allUsers = await User.find();
-        res.json(allUsers);
+        res.status(200).send(allUsers);
     }
 
     public async getUserByName(req: Request, res: Response) : Promise<void> {
         const userFound = await User.findOne({name: req.params.nameUser});
-        res.json(userFound);
+        res.status(200).send(userFound);
         
     }
 
     public async addUser(req: Request, res: Response) : Promise<void> {
         console.log(req.body);
-        const {id, name, psicoProfile, role} = req.body;
-        const newUser = new User({id, name, psicoProfile, role});
+        const {id, name, age, password} = req.body;
+        const newUser = new User({id, name, age, password});
         await newUser.save();
-        res.json('User added!');
+        res.status(200).send('User added!');
     }
 
     public async updateUser(req: Request, res: Response) : Promise<void> {
         await User.findOneAndUpdate ({name: req.params.nameUser}, req.body);
-        res.json('Updated!');
+        res.status(200).send('Updated!');
     }
 
     public async deleteUser(req: Request, res: Response) : Promise<void> {
         await User.findOneAndDelete ({name:req.params.nameUser}, req.body);
-        res.json('Deleted!')
+        res.status(200).send('Deleted!')
 
     } 
 
@@ -47,7 +47,6 @@ class PostRoutes {
         this.router.delete('/:nameUser', this.deleteUser);
     }
 }
-
-const postsRoutes = new PostRoutes();
+const postsRoutes = new UserRoutes();
 
 export default postsRoutes.router;

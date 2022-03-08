@@ -8,7 +8,7 @@ class IndexRoutes {
         this.routes(); //This has to be written here so that the method can actually be configured when called externally.
     }
     routes() {
-        this.router.get('/', (req, res) => res.send('API: /api/users'));
+        this.router.get('/', (req, res) => res.status(200).send('API: /api/users'));
     }
 }
 const indexRoutes = new IndexRoutes();
