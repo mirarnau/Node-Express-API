@@ -64,6 +64,6 @@ class UserRoutes {
         this.router.delete('/:nameUser', this.deleteUser);
     }
 }
-const postsRoutes = new UserRoutes();
+const userRoutes = new UserRoutes();
 
-export default postsRoutes.router;
+export default userRoutes.router;
