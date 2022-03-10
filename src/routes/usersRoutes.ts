@@ -56,7 +56,6 @@ class UserRoutes {
             res.status(200).send('Deleted!');
         }
     } 
-    
     routes() {
         this.router.get('/', this.getUsers);
         this.router.get('/:nameUser', this.getUserByName);
