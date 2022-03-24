@@ -6,7 +6,8 @@ import compression from 'compression';
 import cors from 'cors';
 
 import indexRoutes from './routes/indexRoutes';
-import postsRoutes from './routes/usersRoutes';
+import userRoutes from './routes/usersRoutes';
+import restaurantsRoutes from './routes/restaurantsRoutes';
 
 class Server {
     public app: express.Application;
@@ -38,10 +39,10 @@ class Server {
 
     routes() {
         this.app.use(indexRoutes);
-        this.app.use('/api/users', postsRoutes);
-
+        this.app.use('/api/users', userRoutes);
+        this.app.use('/api/restaurants', restaurantsRoutes);
     }
-
+    
     start() {
         this.app.listen(this.app.get('port'), () =>{
             console.log ('Server listening on port', this.app.get('port'));
