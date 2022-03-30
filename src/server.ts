@@ -8,6 +8,8 @@ import cors from 'cors';
 import indexRoutes from './routes/indexRoutes';
 import userRoutes from './routes/usersRoutes';
 import restaurantsRoutes from './routes/restaurantsRoutes';
+import authenticationRoutes from './routes/authRoutes';
+import { createRoles } from './libs/initialSetup';
 
 class Server {
     public app: express.Application;
@@ -15,13 +17,14 @@ class Server {
     //The contructor will be the first code that is executed when an instance of the class is declared.
     constructor(){
         this.app = express();
+        createRoles();
         this.config();
         this.routes();
     }
 
     config() {
         //MongoDB settings
-        const MONGO_URI = 'mongodb://localhost/tsapi';
+        const MONGO_URI = 'mongodb://localhost/JWTapi';
         mongoose.connect(MONGO_URI || process.env.MONGODB_URL)
         .then(db => console.log("DB is connected"));
 
@@ -41,6 +44,7 @@ class Server {
         this.app.use(indexRoutes);
         this.app.use('/api/users', userRoutes);
         this.app.use('/api/restaurants', restaurantsRoutes);
+        this.app.use('/api/auth', authenticationRoutes);
     }
     
     start() {

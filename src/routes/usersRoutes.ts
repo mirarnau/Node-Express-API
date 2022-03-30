@@ -1,4 +1,5 @@
 import {Request, response, Response, Router} from 'express';
+import { authJwt } from '../middlewares';
 
 import User from '../models/User';
 
@@ -31,8 +32,8 @@ class UserRoutes {
 
     public async addUser(req: Request, res: Response) : Promise<void> {
         console.log(req.body);
-        const {id, name, age, password} = req.body;
-        const newUser = new User({id, name, age, password});
+        const {name, age, password} = req.body;
+        const newUser = new User({name, age, password});
         await newUser.save();
         res.status(200).send('User added!');
     }
@@ -58,10 +59,10 @@ class UserRoutes {
     } 
     routes() {
         this.router.get('/', this.getUsers);
-        this.router.get('/:nameUser', this.getUserByName);
-        this.router.post('/', this.addUser);
-        this.router.put('/:nameUser', this.updateUser);
-        this.router.delete('/:nameUser', this.deleteUser);
+        this.router.get('/:nameUser', [authJwt.verifyToken], this.getUserByName);
+        this.router.post('/', [authJwt.verifyToken, authJwt.isModerator], this.addUser);
+        this.router.put('/:nameUser', [authJwt.verifyToken, authJwt.isModerator], this.updateUser);
+        this.router.delete('/:nameUser',[authJwt.verifyToken, authJwt.isAdmin] ,this.deleteUser);
     }
 }
 const userRoutes = new UserRoutes();

@@ -1,4 +1,5 @@
 import {Request, response, Response, Router} from 'express';
+import { authJwt } from '../middlewares';
 
 import Restaurant from '../models/Restaurant';
 
@@ -123,14 +124,14 @@ class RestaurantsRoutes {
     
     
     routes() {
-        this.router.get('/', this.getAllRestaurants);
-        this.router.get('/:_id', this.getRestaurantById);
-        this.router.get('/name/:restaurantName', this.getRestaurantByName);
-        this.router.get('/filters/tags', this.filterRestaurants);
-        this.router.get('/filters/rating', this.sortByRating)
-        this.router.post('/', this.addRestaurant);
-        this.router.put('/:restaurantName', this.updateRestaurant);
-        this.router.delete('/:restaurantName', this.deleteRestaurant);
+        this.router.get('/',[authJwt.verifyToken] ,this.getAllRestaurants);
+        this.router.get('/:_id',[authJwt.verifyToken], this.getRestaurantById);
+        this.router.get('/name/:restaurantName', [authJwt.verifyToken], this.getRestaurantByName);
+        this.router.get('/filters/tags',[authJwt.verifyToken],this.filterRestaurants);
+        this.router.get('/filters/rating',[authJwt.verifyToken], this.sortByRating)
+        this.router.post('/',[authJwt.verifyToken, authJwt.isModerator], this.addRestaurant);
+        this.router.put('/:restaurantName',[authJwt.verifyToken, authJwt.isAdmin], this.updateRestaurant);
+        this.router.delete('/:restaurantName',[authJwt.verifyToken, authJwt.isAdmin], this.deleteRestaurant);
         
     }
 }
